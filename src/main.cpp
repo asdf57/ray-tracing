@@ -9,7 +9,7 @@ int main(){
   for(int row = 0; row < IMAGE_HEIGHT; row++){
     for(int col = 0; col < IMAGE_WIDTH; col++){
       double r = double(col) / (IMAGE_WIDTH-1);
-      double g = double(col) / (IMAGE_HEIGHT-1);
+      double g = double(row) / (IMAGE_HEIGHT-1);
       double b = 0;
 
       //Normalizing colors to {0..255} mapping
@@ -17,7 +17,7 @@ int main(){
       int ig = static_cast<int>(255.51 * g);
       int ib = static_cast<int>(255.51 * b);
 
-      std::cout << ir << " " << ig << " " << ib << std::endl;
+      std::cout << ir << ' ' << ig << ' ' << ib << std::endl;
     }
   }
 }
