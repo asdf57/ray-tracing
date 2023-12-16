@@ -7,6 +7,11 @@ int main(){
   std::cout << "P3\n" << IMAGE_WIDTH << " " << IMAGE_HEIGHT << "\n255\n";
 
   for(int row = 0; row < IMAGE_HEIGHT; row++){
+    std::clog << "\nScanlines remaining: "
+      << (IMAGE_HEIGHT - row)
+      << ' '
+      << std::flush;
+
     for(int col = 0; col < IMAGE_WIDTH; col++){
       double r = double(col) / (IMAGE_WIDTH-1);
       double g = double(row) / (IMAGE_HEIGHT-1);
@@ -20,4 +25,5 @@ int main(){
       std::cout << ir << ' ' << ig << ' ' << ib << std::endl;
     }
   }
+  std::clog << "\rDone.                 \n";
 }
