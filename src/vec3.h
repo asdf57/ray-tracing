@@ -26,7 +26,7 @@ class vec3{
 
 using point3 = vec3;
 
-// Non-member operator overloads
+//Inline functions
 inline std::ostream& operator<<(std::ostream &out, const vec3 &v) {
     return out << v.v0() << ' ' << v.v1() << ' ' << v.v2();
 }
@@ -74,6 +74,5 @@ inline vec3 unit_vector(vec3 v) {
     v.v2() / v.length_squared()
   );
 }
-
 
 #endif
