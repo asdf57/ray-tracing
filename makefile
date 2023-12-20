@@ -24,6 +24,10 @@ obj/ray.o: src/ray.cpp src/ray.h
 
 build: bin/raytracer
 
+test: build.sh
+	./build.sh tests
+
 clean:
 	rm -rf obj/
 	rm -rf bin/
+	rm -rf build/
