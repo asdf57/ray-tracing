@@ -61,17 +61,17 @@ inline double dot(const vec3 &u, const vec3 &v) {
 
 inline vec3 cross(const vec3 &u, const vec3 &v) {
   return vec3(
-    u.v0() * v.v2() - u.v2() * u.v1(),
-    u.v2() * v.v0() - u.v0() * v.v2(),
-    u.v0() * v.v1() - u.v1() * v.v0()
+      u.v1() * v.v2() - u.v2() * v.v1(),
+      u.v2() * v.v0() - u.v0() * v.v2(),
+      u.v0() * v.v1() - u.v1() * v.v0()
   );
 }
 
 inline vec3 unit_vector(vec3 v) {
   return vec3(
-    v.v0() / v.length_squared(),
-    v.v1() / v.length_squared(),
-    v.v2() / v.length_squared()
+    v.v0() / v.length(),
+    v.v1() / v.length(),
+    v.v2() / v.length()
   );
 }
 
