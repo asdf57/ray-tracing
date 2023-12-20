@@ -5,6 +5,8 @@ project(RayTracing)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+option(BUILD_TESTS "Build the unit tests" OFF)
+
 set(BIN_DIR "${PROJECT_SOURCE_DIR}/bin")
 set(OBJ_DIR "${PROJECT_SOURCE_DIR}/obj")
 
@@ -29,3 +31,9 @@ set_target_properties(raytracer PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${OBJ_DIR}
     RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR}
 )
+
+if(BUILD_TESTS)
+    add_subdirectory(external/googletest)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
