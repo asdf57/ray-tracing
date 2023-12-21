@@ -9,12 +9,41 @@ constexpr int IMAGE_WIDTH = 400;
 constexpr int IMAGE_HEIGHT = std::max(1, static_cast<int>(IMAGE_WIDTH / ASPECT_RATIO));
 
 color lerp(double a, color start_color, color end_color){
-  return (1.0-a)*start_color + a*end_color;
+  return (1.0-a) * start_color + a * end_color;
+}
+
+double hit_sphere(const point3& center, double radius, const ray& ray){
+  vec3 oc = ray.origin() - center;
+  double a = dot(ray.direction(), ray.direction());
+  double b = 2.0 * dot(oc, ray.direction());
+  double c = dot(oc, oc) - radius*radius;
+  double discriminant = b*b - 4*a*c;
+
+  //No real solutions
+  if(discriminant < 0){
+    return -1.0;
+  }
+
+  //Only find the FIRST point of intersection
+  return (-b - sqrt(discriminant)) / (2.0 * a);
 }
 
 color ray_color(const ray& r){
-  vec3 unit_direction = unit_vector(r.direction());
+  point3 sphere_center(0,0,-1);
+  double radius = 0.5;
+  double t = hit_sphere(sphere_center, radius, r);
 
+  //Ray intersects sphere
+  if (t > 0.0){
+    point3 sphere_intersection = r.at(t);
+    //Shortcut to calculate unit vector without square root
+    vec3 sphere_norm = (sphere_intersection - sphere_center) / radius;
+    //Map RBG values between 0 and 1
+    return 0.5*color(sphere_norm.v0()+1, sphere_norm.v1()+1, sphere_norm.v2()+1);
+  }
+
+  //Ray does not hit sphere!
+  vec3 unit_direction = unit_vector(r.direction());
   //Extract and use unit y-component in range [-1,1] to generate color
   auto a = 0.5*(unit_direction.v1() + 1.0);
   return lerp(a, color(1.0, 1.0, 1.0), color(0.5, 0.7, 1.0));
@@ -47,7 +76,7 @@ int main(){
       << (IMAGE_HEIGHT - row)
       << ' '
       << std::flush;
-
+  
     for(int col = 0; col < IMAGE_WIDTH; col++){
       vec3 pixel_center = pixel00_loc + (col*pixel_delta_u) + (row*pixel_delta_v);
       //Create vector from camera center to center of current pixel
