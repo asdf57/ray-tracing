@@ -14,10 +14,10 @@ color lerp(double a, color start_color, color end_color){
 
 double hit_sphere(const point3& center, double radius, const ray& ray){
   vec3 oc = ray.origin() - center;
-  double a = dot(ray.direction(), ray.direction());
-  double b = 2.0 * dot(oc, ray.direction());
-  double c = dot(oc, oc) - radius*radius;
-  double discriminant = b*b - 4*a*c;
+  double a = ray.direction().length_squared();
+  double half_b = dot(oc, ray.direction());
+  double c = oc.length_squared() - radius*radius;
+  double discriminant = half_b*half_b - a*c;
 
   //No real solutions
   if(discriminant < 0){
@@ -25,7 +25,7 @@ double hit_sphere(const point3& center, double radius, const ray& ray){
   }
 
   //Only find the FIRST point of intersection
-  return (-b - sqrt(discriminant)) / (2.0 * a);
+  return (-half_b - sqrt(discriminant)) / a;
 }
 
 color ray_color(const ray& r){
