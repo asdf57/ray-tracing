@@ -23,6 +23,8 @@ target_sources(raytracer PRIVATE
     src/vec3.cpp
     src/color.cpp
     src/ray.cpp
+    src/sphere.cpp
+    src/hit_record.cpp
 )
 
 # Specify where the compiled object files will go
