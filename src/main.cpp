@@ -1,7 +1,10 @@
 #include <iostream>
 #include <algorithm>
+#include "constants.h"
 #include "color.h"
-#include "ray.h"
+#include "hittable.h"
+#include "hittable_list.h"
+#include "sphere.h"
 
 constexpr double ASPECT_RATIO = 16.0 / 9.0;
 constexpr int IMAGE_WIDTH = 400;
@@ -28,33 +31,26 @@ double hit_sphere(const point3& center, double radius, const ray& ray){
   return (-half_b - sqrt(discriminant)) / a;
 }
 
-color ray_color(const ray& r){
-  point3 sphere_center(0,0,-1);
-  double radius = 0.5;
-  double t = hit_sphere(sphere_center, radius, r);
+color ray_color(const ray& r, const hittable& world) {
+  hit_record rec;
 
-  //Ray intersects sphere
-  if (t > 0.0){
-    point3 sphere_intersection = r.at(t);
-    //Shortcut to calculate unit vector without square root
-    vec3 sphere_norm = (sphere_intersection - sphere_center) / radius;
-    //Map RBG values between 0 and 1
-    return 0.5*color(sphere_norm.v0()+1, sphere_norm.v1()+1, sphere_norm.v2()+1);
+  if (world.hit(r, 0, infinity, rec)) {
+    return 0.5 * (rec.getNormal() + color(1,1,1));
   }
 
-  //Ray does not hit sphere!
   vec3 unit_direction = unit_vector(r.direction());
-  //Extract and use unit y-component in range [-1,1] to generate color
   auto a = 0.5*(unit_direction.v1() + 1.0);
-  return lerp(a, color(1.0, 1.0, 1.0), color(0.5, 0.7, 1.0));
+  return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
 }
 
 int main(){
+  hittable_list world;
+
+  world.add(std::make_shared<sphere>(point3(0,0,-1), 0.5));
+  world.add(std::make_shared<sphere>(point3(0,-100.5,-1), 100));
+
   double viewport_height = 2.0;
   double viewport_width = viewport_height * (static_cast<double>(IMAGE_WIDTH) / IMAGE_HEIGHT);
-
-  std::clog << "Viewport Height: " << viewport_height  << std::endl << std::flush;
-  std::clog << "Viewport Width: " << viewport_width << std::endl << std::flush;
 
   point3 camera_center = point3(0, 0, 0);
 
@@ -82,7 +78,7 @@ int main(){
       //Create vector from camera center to center of current pixel
       vec3 ray_direction = pixel_center - camera_center;
       ray ray(camera_center, ray_direction);
-      auto pixel_color = ray_color(ray);
+      color pixel_color = ray_color(ray, world);
 
       //Normalizing colors to {0..255} mapping
       write_pixel(std::cout, pixel_color);
