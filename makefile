@@ -6,9 +6,9 @@ FLAGS=--std=c++17
 
 .PHONY: build clean
 
-bin/raytracer: src/main.cpp obj/color.o obj/vec3.o obj/ray.o obj/sphere.o obj/hit_record.o
+bin/raytracer: src/main.cpp obj/color.o obj/vec3.o obj/ray.o obj/sphere.o obj/hit_record.o obj/hittable_list.o
 	[ -d $(BIN) ] || mkdir -p $(BIN)
-	${CC} ${FLAGS} -o ${BIN}/raytracer ${SRC}/main.cpp ${OBJ}/color.o ${OBJ}/vec3.o ${OBJ}/ray.o ${OBJ}/sphere.o ${OBJ}/hit_record.o
+	${CC} ${FLAGS} -o ${BIN}/raytracer ${SRC}/main.cpp ${OBJ}/color.o ${OBJ}/vec3.o ${OBJ}/ray.o ${OBJ}/sphere.o ${OBJ}/hit_record.o ${OBJ}/hittable_list.o
 
 obj/color.o: src/color.cpp src/color.h
 	[ -d $(OBJ) ] || mkdir -p $(OBJ)
@@ -29,6 +29,10 @@ obj/sphere.o: src/sphere.cpp src/sphere.h src/hittable.h
 obj/hit_record.o: src/hit_record.cpp src/hit_record.h
 	[ -d $(OBJ) ] || mkdir -p $(OBJ)
 	${CC} ${FLAGS} -c -o ${OBJ}/hit_record.o ${SRC}/hit_record.cpp
+
+obj/hittable_list.o: src/hittable_list.cpp src/hittable_list.h
+	[ -d $(OBJ) ] || mkdir -p $(OBJ)
+	${CC} ${FLAGS} -c -o ${OBJ}/hittable_list.o ${SRC}/hittable_list.cpp
 
 build: bin/raytracer
 
