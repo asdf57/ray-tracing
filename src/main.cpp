@@ -33,8 +33,9 @@ double hit_sphere(const point3& center, double radius, const ray& ray){
 
 color ray_color(const ray& r, const hittable& world) {
   hit_record rec;
+  interval intersectionInterval(0, infinity);
 
-  if (world.hit(r, 0, infinity, rec)) {
+  if (world.hit(r, intersectionInterval, rec)) {
     return 0.5 * (rec.getNormal() + color(1,1,1));
   }
 
