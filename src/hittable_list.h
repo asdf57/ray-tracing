@@ -1,10 +1,9 @@
 #ifndef HITTABLE_LIST_H
 #define HITTABLE_LIST_H
 
-#include "hittable.h"
-
 #include <memory>
 #include <vector>
+#include "hittable.h"
 
 class hittable_list : public hittable {
   public:
@@ -12,7 +11,7 @@ class hittable_list : public hittable {
     hittable_list(std::shared_ptr<hittable> object);
     void clear();
     void add(std::shared_ptr<hittable> object);
-    bool hit(const ray& r, double ray_tmin, double ray_tmax, hit_record& rec) const override;
+    bool hit(const ray& r, interval ray_t, hit_record& rec) const override;
   private:
     std::vector<std::shared_ptr<hittable>> objects;
 };
