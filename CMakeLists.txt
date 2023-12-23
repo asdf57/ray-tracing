@@ -26,6 +26,7 @@ target_sources(raytracer PRIVATE
     src/sphere.cpp
     src/hit_record.cpp
     src/hittable_list.cpp
+    src/interval.cpp
 )
 
 # Specify where the compiled object files will go
